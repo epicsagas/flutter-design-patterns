@@ -17,6 +17,8 @@ dependencies:
   flutter_markdown: ^0.6.10
   flutter_riverpod: ^1.0.3
   font_awesome_flutter: ^10.1.0
+  get: ^4.6.5
+  translator: ^0.1.7
   url_launcher: ^6.1.2
   url_strategy: ^0.2.0
   xml: ^6.0.1

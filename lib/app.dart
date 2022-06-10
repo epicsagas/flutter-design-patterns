@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 import 'navigation/router.dart';
 import 'themes.dart';
@@ -8,7 +9,7 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
+    return GetMaterialApp.router(
       title: 'Flutter Design Patterns',
       theme: lightTheme,
       routerDelegate: router.delegate(),
