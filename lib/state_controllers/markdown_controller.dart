@@ -1,24 +1,27 @@
-import 'dart:developer';
 
 import 'package:get/get.dart';
 import 'package:translator/translator.dart';
 
-import './common_controller.dart';
+import './language_controller.dart';
 
 class MarkdownController extends GetxController {
   final String initial = "";
-  var description = ''.obs;
-  var data = ''.obs;
+  RxString description = ''.obs;
+  RxString data = ''.obs;
 
-  final CommonController commonController = Get.put(CommonController());
+  final LanguageController languageController = Get.put(LanguageController());
   final translator = GoogleTranslator();
 
   setDescription(String _description) async {
     var translated = _description;
-
+    final currentLanguageCode = languageController.currentLanguage['code'].toString();
     try {
-      if (commonController.language.value != "en") {
-        final translatedDescription = await translator.translate(_description, from: "en", to: commonController.language.value);
+      if (currentLanguageCode != "en") {
+        final translatedDescription = await translator.translate(
+            _description,
+            from: "en",
+            to: currentLanguageCode,
+        );
         translated = translatedDescription.text;
       }
     } catch(exception) {
@@ -32,10 +35,14 @@ class MarkdownController extends GetxController {
 
   setData(String _data) async {
     var translated = _data;
-
+    final currentLanguageCode = languageController.currentLanguage['code'].toString();
     try {
-      if (commonController.language.value != "en") {
-        final translatedData = await translator.translate(_data, from: "en", to: commonController.language.value);
+      if (currentLanguageCode != "en") {
+        final translatedData = await translator.translate(
+            _data,
+            from: "en",
+            to: currentLanguageCode,
+        );
         translated = translatedData.text;
       }
     } catch(exception) {

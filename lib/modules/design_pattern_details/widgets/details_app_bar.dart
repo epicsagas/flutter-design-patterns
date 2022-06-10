@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:get/get.dart';
 
 import '../../../../themes.dart';
 import '../../../../widgets/platform_specific/platform_back_button.dart';
 import '../../../constants/constants.dart';
 import '../../../data/models/design_pattern.dart';
 import '../../../helpers/helpers.dart';
-import '../../../state_controllers/markdown_controller.dart';
 
 class DetailsAppBar extends StatelessWidget with PreferredSizeWidget {
   final DesignPattern designPattern;
