@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../navigation/router.dart';
-import '../../state_controllers/markdown_controller.dart';
+import '../../store/store.dart';
+
 
 class PlatformBackButton extends StatelessWidget {
   final Color color;
@@ -17,7 +18,7 @@ class PlatformBackButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final MarkdownController mdController = Get.put(MarkdownController());
+    final Store store = Get.put(Store());
     final icon = kIsWeb || Platform.isAndroid
         ? Icons.arrow_back
         : Icons.arrow_back_ios_new;
@@ -27,7 +28,7 @@ class PlatformBackButton extends StatelessWidget {
       color: color,
       splashRadius: 20.0,
       onPressed: () async {
-        await mdController.reset();
+        await store.md.reset();
 
         context.router.canPopSelfOrChildren
             ? context.popRoute()

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 
 import '../../constants/constants.dart';
-import '../../state_controllers/markdown_controller.dart';
+import '../../store/store.dart';
 
 final markdownRepositoryProvider = Provider(
   (ref) => const MarkdownRepository(),
@@ -17,12 +17,12 @@ class MarkdownRepository {
   const MarkdownRepository();
 
   Future<String> get(String designPatternId) async {
+    final Store store = Get.find();
     final path = '${AssetConstants.markdownPath}$designPatternId.md';
     final markdownString = await rootBundle.loadString(path);
-    final MarkdownController mdController = Get.put(MarkdownController());
 
-    await mdController.setData(markdownString);
+    await store.md.setData(markdownString);
 
-    return mdController.description.value;
+    return store.md.description.value;
   }
 }
