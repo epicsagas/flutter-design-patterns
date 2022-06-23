@@ -10,12 +10,13 @@ import 'markdown_store.dart';
 class LanguageStore extends GetxController {
   final sysLanguageCode = ui.window.locale.languageCode;
   final List<String> languageNames = [];
+  late final languageList;
+
   RxString sysLanguageName = "English".obs;
   RxMap<String, String> currentLanguage = {
     "code": "en",
     "name": "English",
   }.obs;
-  late final languageList;
 
   @override
   Future<void> onInit() async {
@@ -45,12 +46,10 @@ class LanguageStore extends GetxController {
     }
 
     if (_language != null) {
-      currentLanguage = RxMap({
+      currentLanguage.value = {
         "code": _language['code'].toString(),
         "name": _language['name'].toString()
-      });
-
-      update();
+      };
     }
   }
 

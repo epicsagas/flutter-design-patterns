@@ -21,7 +21,7 @@ class MarkdownRepository {
     final path = '${AssetConstants.markdownPath}$designPatternId.md';
     final markdownString = await rootBundle.loadString(path);
 
-    await store.md.setData(markdownString);
+    store.md.data.value = markdownString;
 
     return store.md.description.value;
   }

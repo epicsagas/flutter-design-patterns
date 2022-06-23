@@ -22,7 +22,7 @@ class MarkdownView extends ConsumerWidget {
     final markdown = ref.watch(markdownProvider(designPattern.id));
     final Store store = Get.put(Store());
 
-    store.md.setDescription(designPattern.description);
+    store.md.description.value = designPattern.description;
 
     return ScrollConfiguration(
       behavior: const ScrollBehavior(),

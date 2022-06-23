@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:translator/translator.dart';
+
+import 'language_store.dart';
 
 class MarkdownStore extends GetxController {
   final String initial = "";
@@ -7,71 +11,61 @@ class MarkdownStore extends GetxController {
   RxString data = ''.obs;
   RxString descriptionTranslated = ''.obs;
   RxString dataTranslated = ''.obs;
+
   final translator = GoogleTranslator();
+  final languageStore = Get.find<LanguageStore>();
 
   @override
   Future<void> onInit() async {
+    languageStore.currentLanguage.listen((value) async {
+      if (value.containsKey('code')) {
+        final languageCode = value['code'].toString();
+
+        if (languageCode == "en") {
+          descriptionTranslated.value = description.value;
+          dataTranslated.value = data.value;
+        } else {
+          descriptionTranslated.value = await translate(languageCode: languageCode, data: description.value);
+          dataTranslated.value = await translate(languageCode: languageCode, data: data.value);
+        }
+      }
+    });
+
+    description.listen((value) async {
+      if (value.isNotEmpty && languageStore.currentLanguage.containsKey('code')) {
+        descriptionTranslated.value = await translate(languageCode: languageStore.currentLanguage['code'].toString(), data: value);
+      } else {
+        descriptionTranslated.value = '';
+      }
+    });
+
+    data.listen((value) async {
+      if (value.isNotEmpty && languageStore.currentLanguage.containsKey('code')) {
+        dataTranslated.value = await translate(languageCode: languageStore.currentLanguage['code'].toString(), data: value);
+      } else {
+        dataTranslated.value = '';
+      }
+    });
+
     super.onInit();
   }
 
-  Future<void> setDescription(String _description) async {
-    description = RxString(_description);
-    update();
-  }
+  Future<String> translate({String languageCode = "en", String data = ""}) async {
+    try {
+      final translated = await translator.translate(
+        data,
+        from: "en",
+        to: languageCode,
+      );
 
-  Future<void> setData(String _data) async {
-    data = RxString(_data);
-    update();
-  }
-
-  Future<void> translateDescription({String languageCode = "en"}) async {
-    String translated = description.value;
-
-    if (languageCode != "en") {
-      try {
-        final translatedDescription = await translator.translate(
-          description.value,
-          from: "en",
-          to: languageCode,
-        );
-
-        translated = translatedDescription.text;
-      } catch(exception) {
-        translated = exception.toString();
-      }
+      return translated.text;
+    } catch(exception) {
+      return exception.toString();
     }
-
-    descriptionTranslated = RxString(translated);
-    update();
-  }
-
-  Future<void> translateData({String languageCode = "en"}) async {
-    String translated = data.value;
-
-    if (languageCode != "en") {
-      try {
-        final translatedData = await translator.translate(
-          data.value,
-          from: "en",
-          to: languageCode,
-        );
-
-        translated = translatedData.text;
-      } catch(exception) {
-        translated = exception.toString();
-      }
-    }
-
-    dataTranslated = RxString(translated);
-    update();
   }
 
   Future<void> reset() async {
-    description = RxString(initial);
-    data = RxString(initial);
-    descriptionTranslated = RxString(initial);
-    dataTranslated = RxString(initial);
-
-    update();
+    description.value = '';
+    data.value = '';
   }
 }
